@@ -5,7 +5,6 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
 }
-co
 const crypto = require("crypto");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Do Bem - make-request</title>
+    <meta name="description" content="Nossos problemas estão interligados, assim como as soluções.Nós prosperamos e somos mais fortes quando cooperamos. Atuamos para promover a ligação entre pessoas que querem se ajudar." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="72x72" href="../static/images/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900%7COpen+Sans:300,400,600,700,800"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/styles/mystyle.css" />
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  </head>
+
+  <body>    
+    <div class="header">
+      <i class="fas fa-chevron-circle-left fa-lg to-back" style="font-size: 30px; color: #0AAAA0; padding: 5px;"></i>   
+      <div >
+        <div class="menu-logo">
+          <div >
+            <a href="index.html" class="logo-index"
+            ><img class="logo" src="../static/images/logo.png" alt=""
+            /></a>
+          </div>
+          <div class="donate-button-wrap">
+            <button id="log-out-button" class="btn base-ranger">SAIR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="banner-area-form  all-text-white text-center">
+      <div class="container-form">       
+          <div class="col-md-12">
+            <h3>Conte seu Desejo</h3>
+            <div class="container">             
+              <div action="#" class="form-contact" method="post" tabindex="1">
+                <select type="text" class="form-contact-input" name="nome" id="category-input"  placeholder="Categoria do pedido">
+                  <option value="category-action">Escolha uma categoria</option>
+                  <option value="noel" class="category">Noel</option>
+                  <option value="edu" class="category">Edu</option>
+                  <option value="caregiver" class="category">Cuidador</option>
+                </select>
+                <input type="text" class="form-contact-input" name="nome"  id="title-input" placeholder="Título do pedido:" required />
+                <input type="text" class="form-contact-input" name="phone" id="phone-input" class="only-number" placeholder="Telefone pra contato: DD + número, sem espaços" size="11" maxlength="11" required/>    
+                <textarea class="form-contact-textarea" name="conteudo" id="description-input" placeholder="Descreva as caracteristicas do pedido" required></textarea>
+                <button type="submit" class="form-contact-button make-request-button">Enviar</button>
+                <span id="make-request-span" class="center error-message centralize"></span>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/scripts/make-request.js"></script>
+  </body>
+</html>

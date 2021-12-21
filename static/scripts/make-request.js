@@ -1,16 +1,6 @@
 $(document).ready(() => {
   $("#log-out-button").on("click", () => {
-    $.ajax({
-      type: "GET",
-      url: `/log-out`,
-      data: "",
-      success: () => {
-        window.location.replace(`/`);
-      },
-      error: () => {
-        window.location.replace(`/error-page`);
-      },
-    });
+    window.location.replace("/");;
   });
 
   $(".make-request-button").on("click", function () {

@@ -101,7 +101,7 @@
   }
 }
 .main-menu-area--absolute {
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
   top: 0;
   z-index: 987;

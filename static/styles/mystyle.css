@@ -6,7 +6,7 @@ body {
   font-weight: 400;
   color: #606060;
 }
-@media (max-width: 480px) {
+/*@media (max-width: 480px) {
     .col-xxs-12 {
       width: 100%;
     }
@@ -32,7 +32,7 @@ body {
     .text-xs-center {
       text-align: center;
     }
-}
+}*/
 .header {
     overflow: hidden;
     background-color: #f1f1f1;
@@ -94,9 +94,20 @@ body {
   color: #fff;
   background: #F30D0D;
 }
+
 /*----------** home **----------*/
 
-
+.card{
+  width: clamp(30px, 50%, 900px); 
+  margin-left: -5%;
+}
+#banner-home{
+  margin-top: 0;
+}
+#container-logged{
+  margin-top: -10%;
+  height: 90%;
+}
 /*----------** tank-send **----------*/
 .banner-area-tank-send {
   position: relative;
@@ -224,16 +235,19 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
+  
 }
 
 .cards_item {
   display: flex;
   padding: 1rem;
+
 }
 
 @media (min-width: 40rem) {
   .cards_item {
     width: 50%;
+    width: clamp(30px, 50%, 900px); 
   }
 }
 @media (min-width: 56rem) {

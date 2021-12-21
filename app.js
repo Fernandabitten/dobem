@@ -1,10 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 8000;
-}
+const HOSTNAME = "localhost:";
+const SERVER_PORT = "3000";
 const crypto = require("crypto");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
@@ -662,6 +660,27 @@ app.post("/send-message", (req, res) => {
     });
 });
 
+app.patch("/request-done", (req, res) => {
+  const requestId = req.body.data;
+  readFile(ORDERS_DB)
+  .then(async (ordersDB) => {
+    const selectedOrder = await ordersDB.filter(orderDB => {
+      return orderDB.id == requestId;
+    });
+    const phone = selectedOrder[0].telephone;
+    const title = selectedOrder[0].title;
+    const username = selectedOrder[0].username;
+    res.status(200).json({"phone": phone, "title": title, "username": username});
+    //change the order status on db
+  })
+  .catch(err =>{
+    if (err) {
+      res.status(500).json({"message": "ERRO INTERNO"});
+    };  
+  });
+});
+
+
 // ------ FUNCOES UTEIS -------------//
 const validateUser = (user, usersDB) => {
   let isValid = true;
@@ -703,4 +722,6 @@ const saveFile = (fileName, data) => {
   });
 };
 
-app.listen(port);
+app.listen(SERVER_PORT, () => {
+  console.log(`Server running at http://${HOSTNAME}${SERVER_PORT}/`);
+});

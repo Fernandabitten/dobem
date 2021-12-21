@@ -1,8 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const HOSTNAME = "localhost:";
-const SERVER_PORT = "3000";
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+co
 const crypto = require("crypto");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
@@ -722,6 +725,5 @@ const saveFile = (fileName, data) => {
   });
 };
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server running at http://${HOSTNAME}${SERVER_PORT}/`);
-});
+
+app.listen(port);

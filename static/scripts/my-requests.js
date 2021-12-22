@@ -11,11 +11,11 @@ $(document).ready(() => {
 
         for (let key in data) {
           let button =
-            data[key].statusOrder === false
+            data[key].status_order === 2 
               ? '<p style="color: #04BECE";>Pedido Atendido</p><!--<p><button class="btn card_btn" class="want-tank-button">Quero Agradecer</button>--></p>'
               : '<p style="color: #f9da82">Pedido em Análise</p>';
 
-          if (data[key].type === "noel") {
+          if (data[key].type === 1) {
             textReferenceNoel += `<li class="card_text" style="border-style: outset; margin:30px; padding: 20px;">             
             Solicitado por: ${data[key].username}<br />         
             Pedido: ${data[key].title}<br />
@@ -23,7 +23,7 @@ $(document).ready(() => {
             ${button}
             </li>`;
             $("#you-noel").html(textReferenceNoel);
-          } else if (data[key].type === "edu") {
+          } else if (data[key].type === 2) {
             textReferenceEdu += `<li class="card_text" style="border-style: outset; margin:30px; padding: 20px;">
             Solicitado por: ${data[key].username}<br /> 
             Pedido: ${data[key].title}<br />
@@ -31,7 +31,7 @@ $(document).ready(() => {
             ${button}
             </li>`;
             $("#you-edu").html(textReferenceEdu);
-          } else if (data[key].type === "caregiver") {
+          } else if (data[key].type === 3) {
             textReferenceCaregiver += `<li class="card_text" style="border-style: outset; margin:30px; padding: 20px;">
             Solicitado por: ${data[key].username}<br /> 
             Pedido: ${data[key].title}<br />

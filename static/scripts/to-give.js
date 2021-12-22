@@ -30,7 +30,7 @@ $(document).ready(() => {
         for (let key in data) {
           let telephone = Number(`${data[key].telephone}`);
 
-          if (data[key].type === "noel" && data[key].statusOrder === true) {
+          if (data[key].categorie_id === 1 && data[key].status_id === 1) {
             textReferenceNoel += `<li id=${data[key].id} class="card_text" style="border-style: outset; margin:30px; padding: 20px; text-align: left">             
             Doe para: ${data[key].username}<br />         
             Pedido: ${data[key].title}<br /> 
@@ -39,8 +39,8 @@ $(document).ready(() => {
             </li>`;
             $("#you-noel").html(textReferenceNoel);
           } else if (
-            data[key].type === "edu" &&
-            data[key].statusOrder === true
+            data[key].categorie_id === 2 &&
+            data[key].status_id === 1
           ) {
             textReferenceEdu += `<li id=${data[key].id} class="card_text" style="border-style: outset; margin:30px; padding: 20px; text-align: left">
             Doe para: ${data[key].username}<br />    
@@ -50,14 +50,14 @@ $(document).ready(() => {
             </li>`;
             $("#you-edu").html(textReferenceEdu);
           } else if (
-            data[key].type === "caregiver" &&
-            data[key].statusOrder === true
+            data[key].categorie_id === 3 &&
+            data[key].status_id === 1
           ) {
             textReferenceCaregiver += `<li id=${data[key].id} class="card_text" style="border-style: outset; margin:30px; padding: 20px; text-align: left">
             Doe para: ${data[key].username}<br />    
             Pedido: ${data[key].title}<br />
             Descrição: ${data[key].description}<br /><br/> 
-            <button style="color: #f9da82;" data-request-id=${data[key].id} class="btn send-button" >DOAR</button>
+            <button style="color: #f9da82;" data-request-id=${data[key].id} data-user-id=${data[key]} class="btn send-button" >DOAR</button>
             </li>`;
             $("#you-caregiver").html(textReferenceCaregiver);
           };

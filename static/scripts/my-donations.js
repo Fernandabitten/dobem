@@ -10,23 +10,29 @@ $(document).ready(() => {
         let textReferenceCaregiver = "";
 
         for (let key in data) {
-          if (data[key].type === "noel") {
+          if (data[key].type === 1) {
             textReferenceNoel += `<li class="card_text" class="voce-edu">
-            Doação ${data[key].title}
+            Doação: ${data[key].title}<br />
+            Descrição: ${data[key].description}<br />
+            Para: ${data[key].username}
             <div class="section-heading-separator"></div>
             </li>`;
 
             $("#you-noel").html(textReferenceNoel);
-          } else if (data[key].type === "edu") {
+          } else if (data[key].type === 2) {
             textReferenceEdu += `<li class="card_text">
-            Doação ${data[key].title}
+            Doação: ${data[key].title}<br />
+            Descrição: ${data[key].description}<br />
+            Para: ${data[key].username}
             <div class="section-heading-separator"></div>
             </li>`;
 
             $("#you-edu").html(textReferenceEdu);
-          } else if (data[key].type === "caregiver") {
+          } else if (data[key].type === 3) {
             textReferenceCaregiver += `<li class="card_text">
-            Doação ${data[key].title}
+            Doação: ${data[key].title}<br />
+            Descrição: ${data[key].description}<br />
+            Para: ${data[key].username}
             <div class="section-heading-separator"></div>
             </li>`;
 

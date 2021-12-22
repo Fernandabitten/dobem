@@ -5,13 +5,12 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
 }
-const crypto = require("crypto");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 let path = require("path");
-const { type, cookie } = require("express/lib/response");
 const jwt = require("jsonwebtoken");
+const { Client } = require("pg");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -28,24 +27,8 @@ const PAGE_INDEX_DIR = __dirname + "/view/index.html";
 const PAGE_SIGN_IN_DIR = __dirname + "/view/sign-in.html";
 const PAGE_SIGN_UP_DIR = __dirname + "/view/sign-up.html";
 const PAGE_PRIVACY_POLICY_DIR = __dirname + "/view/privacy-policy.html";
-const PAGE_HOME_DIR = __dirname + "/view/home.html";
-const PAGE_TO_GIVE_DIR = __dirname + "/view/to-give.html";
-const PAGE_RECEIVE_LIST_DIR = __dirname + "/view/receive-list.html";
-const PAGE_RECEIVE_DETALES_DIR = __dirname + "/view/receive-detales.html";
-const PAGE_TO_RECEIVE_DIR = __dirname + "/view/to-receive.html";
-const PAGE_THANK_SEND_DIR = __dirname + "/view/thank-send.html";
-const PAGE_THANK_FORM_DIR = __dirname + "/view/thank-form.html";
-const PAGE_ORDER_HISTORY_DIR = __dirname + "/view/my-requests.html";
-const PAGE_MAKE_REQUESTS_DIR = __dirname + "/view/make-request.html";
-const PAGE_MAKE_REQUESTS_MSG_DIR =
-  __dirname + "/view/make-request-send-msg.html";
-const PAGE_HELP_SEND_MSG_DIR = __dirname + "/view/help-send-msg.html";
-const PAGE_MY_DONATION_DIR = __dirname + "/view/my-donations.html";
 const MESSAGE = __dirname + "/db/thank-mensage.json";
-const DONATIONS_DB = __dirname + "/db/donations.json";
-const ORDER_DB = __dirname + "/db/order.json";
-const ORDERS_DB = __dirname + "/db/orders.json";
-const USERS_DB = __dirname + "/db/users.json";
+
 
 const tokenVerification = async (
   req,
@@ -56,7 +39,6 @@ const tokenVerification = async (
   filePath2,
   redirectedPath
 ) => {
-  //console.log("tokenVerification")
   const { accessToken } = req.cookies;
   const toDoOption1 = option1;
   const toDoOption2 = option2;
@@ -98,13 +80,6 @@ let SESSIONS = [];
 // -------- APIs -------------------//
 app.get("/", (req, res) => {
   res.clearCookie("session_id");
-  /*const { cookies } = req;
-  const session = SESSIONS.find(
-    (element) => element.token == cookies.session_id    
-  );
- res.sendFile(PAGE_INDEX_DIR)*/
-
-  //res.sendFile(PAGE_INDEX_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -119,7 +94,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/sign-in", (req, res) => {
-  //res.sendFile(PAGE_SIGN_IN_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -134,7 +108,6 @@ app.get("/sign-in", (req, res) => {
 });
 
 app.get("/sign-up", (req, res) => {
-  //res.sendFile(PAGE_SIGN_UP_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -149,7 +122,6 @@ app.get("/sign-up", (req, res) => {
 });
 
 app.get("/privacy-policy", (req, res) => {
- //res.sendFile(PAGE_PRIVACY_POLICY_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -165,7 +137,6 @@ app.get("/privacy-policy", (req, res) => {
 
 
 app.get("/home", (req, res) => {
-  //res.sendFile(PAGE_HOME_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -176,11 +147,10 @@ app.get("/home", (req, res) => {
     __dirname + "/view/home.html",
     __dirname + "/view/home.html",
     "/"
-  ); //change "option2" to redirect and "filePath2" to ""
+  );
 });
 
 app.get("/to-give", (req, res) => {
-  //res.sendFile(PAGE_TO_GIVE_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -191,82 +161,7 @@ app.get("/to-give", (req, res) => {
     __dirname + "/view/to-give.html",
     __dirname + "/view/to-give.html",
     "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/receive-list", (req, res) => {
-  //res.sendFile(P PAGE_RECEIVE_LIST_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/treceive-list.html",
-    __dirname + "/view/receive-list.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/receive-detales", (req, res) => {
-  //res.sendFile(PAGE_RECEIVE_DETALES_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/receive-detales.html",
-    __dirname + "/view/receive-detales.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/to-receive", (req, res) => {
-  // res.sendFile(PAGE_TO_RECEIVE_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/to-receive.html",
-    __dirname + "/view/to-receive.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/thank-send", (req, res) => {
-  //res.sendFile(PAGE_THANK_SEND_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/thank-send.html",
-    __dirname + "/view/thank-send.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/thank-form", (req, res) => {
-  //res.sendFile(PAGE_THANK_FORM_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/thank-form.html",
-    __dirname + "/view/thank-form.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
+  );
 });
 
 app.get("/my-requests", (req, res) => {
@@ -281,26 +176,10 @@ app.get("/my-requests", (req, res) => {
     __dirname + "/view/my-requests.html",
     __dirname + "/view/my-requests.html",
     "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/help-send-msg", (req, res) => {
-  //res.sendFile(PAGE_HELP_SEND_MSG_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/help-send-msg.html",
-    __dirname + "/view/help-send-msg.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
+  ); 
 });
 
 app.get("/my-donations", (req, res) => {
-  //res.sendFile(PAGE_DONATION_HISTORY_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -311,11 +190,10 @@ app.get("/my-donations", (req, res) => {
     __dirname + "/view/my-donations.html",
     __dirname + "/view/my-donations.html",
     "/"
-  ); //change "option2" to redirect and "filePath2" to ""
+  );
 });
 
 app.get("/make-request", (req, res) => {
-  //res.sendFile(PAGE_MAKE_REQUESTS_DIR);
   const requisition = req;
   const response = res;
   tokenVerification(
@@ -326,80 +204,7 @@ app.get("/make-request", (req, res) => {
     __dirname + "/view/make-request.html",
     __dirname + "/view/make-request.html",
     "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/make-request-send-msg", (req, res) => {
-  //res.sendFile(PAGE_MAKE_REQUESTS_MSG_DIR);
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/make-request-send-msg.html",
-    __dirname + "/view/make-request-send-msg.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/cause", (req, res) => {
-  //insert param :cause
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/cause.html",
-    __dirname + "/view/cause.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/cause/detail", (req, res) => {
-  //insert param :cause and :id '/cause/:cause/detail/:id
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/detail.html",
-    __dirname + "/view/detail.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/thank-you", (req, res) => {
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/thank-you.html",
-    __dirname + "/view/thank-you.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
-});
-
-app.get("/request-confirmation", (req, res) => {
-  const requisition = req;
-  const response = res;
-  tokenVerification(
-    requisition,
-    response,
-    "sendFile",
-    "sendFile",
-    __dirname + "/view/request-confirmation.html",
-    __dirname + "/view/request-confirmation.html",
-    "/"
-  ); //change "option2" to redirect and "filePath2" to ""
+  );
 });
 
 app.get("/error-page", (req, res) => {
@@ -407,73 +212,45 @@ app.get("/error-page", (req, res) => {
   res.sendFile(__dirname + "/view/error-page.html");
 });
 
-app.get("/receive-list", (req, res) => {
-  //res.sendFile(PAGE_GIVE_LIST_DIR);
-  /*const requisition = req;
-  const response = res;
-  tokenVerification(requisition, response, "sendFile", "sendFile", __dirname+"/view/request-receive-list.html", __dirname+"/view/request-receive-list.html", "/")//change "option2" to redirect and "filePath2" to ""*/
+app.get("/donation", async (req, res) => {
   const { cookies } = req;
+  const { user_id } = cookies;
 
   const session = SESSIONS.find(
     (element) => element.token == cookies.session_id
   );
-  res.sendFile(PAGE_GIVE_LIST_DIR);
+
+  const data = await getMyDonations(user_id);
+  console.log(data);
+  res.send(data);
 });
 
-app.get("/donation", (req, res) => {
+app.get("/orderUser", async (req, res) => {
   const { cookies } = req;
+  const { user_id } = cookies;
 
   const session = SESSIONS.find(
     (element) => element.token == cookies.session_id
   );
-  res.sendFile(DONATIONS_DB);
+
+  try {
+    const data = await getMyRequests(user_id);
+    console.log(data)
+    res.send(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
 });
 
-app.get("/orderUser", (req, res) => {
+app.get("/order", async (req, res) => {
   const { cookies } = req;
   const session = SESSIONS.find(
     (element) => element.token == cookies.session_id
   );
-  readFile(ORDERS_DB)
-    .then((ordersDB) => {
-      res.send(
-        ordersDB.filter(order => order.username == session.username) 
-      );
-      return
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
-});
 
-app.get("/order", (req, res) => {
-  const { cookies } = req;
-  const session = SESSIONS.find(
-    (element) => element.token == cookies.session_id
-  );
-  res.sendFile(ORDERS_DB);
-  /*console.log(session.username + " " + "session")*/
-
-   /*readFile(ORDERS_DB)
-   .then((ordersDB) => {
-      res.send(
-        ordersDB.filter(order => order.username == session.username) 
-        /*ordersDB.map((order) => {
-          if (order.username === session.username) {
-            // console.log(order.title + " " + "deu match")
-            console.log(order.title + " " + order.username);
-            const orderUser = order.title + order.description + order.username;
-            console.log(orderUser)
-            return order;
-          }
-        })*/  
-
-     /* );
-      return
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });*/
+  const data = await getOrders();
+  res.send(data);
 });
 
 app.get("/log-out", (req, res) => {
@@ -503,226 +280,478 @@ app.get("/verify", (req, res) => {
   }
 });
 
-/*app.get("/info", (req, res) => {
+app.post("/sign-in", async (req, res) => {
+
   try {
-      res.status(200).json({"message": "Usuário encontrado", "data": "&ltnome do usuário&gt"})
-  } catch (e) {
-      res.status(500).json({"message": "Ocorreu um erro no servidor", "error": e});
-  };
-});*/
+    const { username } = req.body;
+    const { password } = req.body;
 
-app.post("/sign-in", async (req, res, next) => {
-  try {
-    const username = req.body.username;
-    const password = req.body.password;
+    const savedUser = await getUserLogin(username);
+    console.log("informações de Login:", savedUser);
 
-    readFile(USERS_DB).then(async (usersDB) => {
-      const savedUser = usersDB.find((element) => element.username == username);
+    if (savedUser) {
 
-      if (savedUser) {
-        const hash = await bcrypt.hash(password, savedUser.salt);
+      const hash = await bcrypt.hash(password, savedUser.salt);
 
-        if (savedUser.hash == hash) {
-          const sessionToken = await bcrypt.hash(
-            new Date().getTime() + username,
-            savedUser.salt
-          );
-          SESSIONS.push({ token: sessionToken, username: username });
-          //console.log("log in SESSIONS: ", SESSIONS);
-          res.cookie("session_id", sessionToken);
+      if (savedUser.hash == hash) {
 
-          if (savedUser.userType === "regularUser") {
-            res.send("/home"); /*colocar a logica de usuario logado*/
-          } else {
-            res.send("/home");
-          }
-        } else {
-          res.status(403).json({ msg: "Usuário ou senha incorretos" });
-        }
+        const sessionToken = await bcrypt.hash(
+          new Date().getTime() + username,
+          savedUser.salt
+        );
+
+        SESSIONS.push({ token: sessionToken, username: username });
+
+        res.cookie("session_id", sessionToken);
+        res.cookie("user_id", savedUser.id);
+
+        
+        res.send("/home");
+
       } else {
-        res.status(404).json({ msg: "Usuário não encontrado" });
+        res.status(403).json({ msg: "Usuário ou senha incorretos" });
       }
-    });
+
+    } else {
+      res.status(404).json({ msg: "Usuário não encontrado" });
+    }
+
   } catch (err) {
     res.status(500).json({ msg: "Erro interno, tente mais tarde" });
   }
 });
 
-app.post("/sign-up-verify", (req, res) => {
+app.post("/sign-up-verify", async (req, res) => {
   try {
+    const now = new Date();
+    const dateString = now.toISOString().slice(0, 19);
     const newUser = req.body;
     let cpfParam = "";
     let usernameParam = "";
     let emailParam = "";
     let phoneParam = "";
-    readFile("./db/users.json", "[]")
-      .then(async (users) => {
-        if (users.find((user) => user.cpf == newUser.cpf)) {
-          cpfParam = "<h4>CPF já cadastrado.</h4>";
-        }
-        if (users.find((user) => user.username == newUser.username)) {
-          usernameParam = "<h4>Nome de usuário já existe.</h4>";
-        }
-        if (users.find((user) => user.email == newUser.email)) {
-          emailParam = "<h4>Email já cadastrado para outro usuário.</h4>";
-        }
-        if (
-          users.find(
-            (user) =>
-              user.phoneDDD + user.phoneNumber ==
-              newUser.phoneDDD + newUser.phoneNumber
-          )
-        ) {
-          phoneParam =
-            "<h4>Número de telefone já cadastrado para outro usuário.</h4>";
-        }
-        const errorContent = cpfParam + usernameParam + emailParam + phoneParam;
-        if (errorContent != "") {
-          res.status(409).json({ message: errorContent });
-        } else {
-          const saltRounds = 8;
-          let salt = await bcrypt.genSalt(saltRounds);
-          let hash = await bcrypt.hash(newUser.password, salt);
 
-          const newUserJson = {
-            ...newUser,
-            hash: hash,
-            salt: salt,
-            userType: "regularUser",
-            creationTimestamp: new Date().getTime(),
-            deletionTimestamp: "",
-            " usertype": "user",
-          };
+    try {
 
-          users.push(newUserJson);
+      const users = await getUsersUniqueInformations();
+      console.log(users)
 
-          fs.writeFile("./db/users.json", JSON.stringify(users), (err) => {
-            if (err)
-              res
-                .status(500)
-                .json({
-                  message: "Ocorreu um erro na criação do usuário",
-                  error: err,
-                });
-          });
-          res.status(201).json({ message: "NEW USER CREATED" });
-        }
-      })
-      .catch((e) => {
-        res
-          .status(500)
-          .json({
-            message: "Ocorreu um erro no cadastro do usuário",
-            error: e,
-          });
-      });
+      if (users.find((user) => user.cpf == newUser.cpf)) {
+        cpfParam = "<h4>CPF já cadastrado.</h4>";
+      }
+      if (users.find((user) => user.username == newUser.username)) {
+        usernameParam = "<h4>Nome de usuário já existe.</h4>";
+      }
+      if (users.find((user) => user.email == newUser.email)) {
+        emailParam = "<h4>Email já cadastrado para outro usuário.</h4>";
+      }
+      if (
+        users.find(
+          (user) =>
+            user.ddd + user.cell ==
+            newUser.ddd + newUser.cell
+        )
+      ) {
+        phoneParam =
+          "<h4>Número de telefone já cadastrado para outro usuário.</h4>";
+      }
+
+      const errorContent = cpfParam + usernameParam + emailParam + phoneParam;
+
+      if (errorContent != "") {
+        res.status(409).json({ message: errorContent });
+      } else {
+
+        const saltRounds = 8;
+        let salt = await bcrypt.genSalt(saltRounds);
+        let hash = await bcrypt.hash(newUser.password, salt);
+
+        const newUserJson = {
+          ...newUser,
+          hash: hash,
+          salt: salt,
+          creation: dateString,
+        };
+
+        await insertNewUser(newUserJson);
+        res.status(201).json({ message: "NEW USER CREATED" });
+      }
+    } catch(e) {
+      res
+        .status(500)
+        .json({
+          message: "Ocorreu um erro no cadastro do usuário",
+          error: e,
+        });
+    }
+
   } catch (e) {
     res.status(500).json({ message: "Ocorreu um erro no servidor", error: e });
   }
 });
 
-app.post("/register-order", (req, res) => {
+app.post("/register-order", async(req, res) => {
   const { cookies } = req;
+  const { user_id } = cookies;
+
   const session = SESSIONS.find(
     (element) => element.token == cookies.session_id
   );
-  readFile(ORDERS_DB)
-    .then((ordersDB) => {
-      const newOrder = req.body;
-      if (validateOrder(newOrder)) {
-        newOrder["id"] = Date.now().toString();
-        newOrder["username"] = session.username;
-        newOrder["statusOrder"] = true;
-        ordersDB.push(newOrder);
 
-        saveFile(ORDERS_DB, ordersDB).then((result) => res.send("OK"));
-      } else {
-        res.status(403).json({ msg: "Pedido inválido" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
+  try {
+    const newOrder = req.body;
+    console.log(typeof(newOrder.type))
+    console.log(newOrder);
+
+    await insertNewOrder(newOrder, user_id);
+
+  } catch {
+
+    res.status(500).json({ message: err.message });
+  }
 });
 
-app.post("/send-message", (req, res) => {
-  readFile(MESSAGE)
-    .then((mensagesDB) => {
-      const newMessage = req.body;
-      if (validateMessage(newMessage)) {
-        newMessage["id"] = Date.now().toString();
-        mensagesDB.push(newMessage);
-        saveFile(MESSAGE, mensagesDB).then((result) => res.send("OK"));
-      } else {
-        res.status(403).json({ msg: "Email inválido" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
+app.patch("/request-done", async (req, res) => {
+  try {
+    const requestId = req.body.data;
+    const userId = req.cookies.user_id;
+    console.log(userId);
+    const selectedOrder = await confirmHelp(requestId);
+
+    const phone = selectedOrder.ddd + selectedOrder.cell;
+    const title = selectedOrder.title;
+    const username = selectedOrder.username;
+    res.status(200).json({ "phone": phone, "title": title, "username": username });
+
+
+    completeOrder(userId, requestId);
+
+  } catch (error) {
+    res.status(500).json({ "message": "ERRO INTERNO" });
+  }
 });
 
-app.patch("/request-done", (req, res) => {
-  const requestId = req.body.data;
-  readFile(ORDERS_DB)
-  .then(async (ordersDB) => {
-    const selectedOrder = await ordersDB.filter(orderDB => {
-      return orderDB.id == requestId;
-    });
-    const phone = selectedOrder[0].telephone;
-    const title = selectedOrder[0].title;
-    const username = selectedOrder[0].username;
-    res.status(200).json({"phone": phone, "title": title, "username": username});
-    //change the order status on db
-  })
-  .catch(err =>{
-    if (err) {
-      res.status(500).json({"message": "ERRO INTERNO"});
-    };  
+//----------------- FUNÇÕES DO BANCO ------------------
+const getUserLogin = async (username) => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
   });
-});
 
+  try {
 
-// ------ FUNCOES UTEIS -------------//
-const validateUser = (user, usersDB) => {
-  let isValid = true;
-  isValid = user.username && user.password && user.fullname;
-  isValid = !usersDB.some((element) => element.username == user.username);
-  return isValid;
-};
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query("SELECT hash, salt, id FROM users WHERE username = $1", [username]);
+    data = result.rows;
 
-const validateMessage = (form) => {
-  let isValid = true;
-  isValid = form.name && form.textarea;
-  return isValid;
-};
+  } catch (error) {
 
-const validateOrder = (order) => {
-  let isValid = true;
-  isValid = order.type && order.title && order.telephone && order.description;
-  return isValid;
-};
+    console.log(error);
 
-const readFile = (fileName) => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(fileName, "utf-8", (err, data) => {
-      if (err) reject(err);
-      resolve(JSON.parse(data));
-    });
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data[0];
+}
+
+const getOrders = async () => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
   });
-};
 
-const saveFile = (fileName, data) => {
-  return new Promise((resolve, reject) => {
-    const dataText = JSON.stringify(data);
-    fs.writeFile(fileName, dataText, (err) => {
-      if (err) {
-        reject(err);
-      }
-      resolve("JSON salvo");
-    });
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query(`
+      SELECT help_orders.id, categorie_id, status_id, title, description, users.username
+      FROM help_orders
+      INNER JOIN users ON help_orders.grantee_id = users.id
+    `);
+    data = result.rows;
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data;
+}
+
+const confirmHelp = async (id) => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
   });
-};
 
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query(`
+      SELECT help_orders.id, title, users.username, users.ddd, users.cell
+      FROM help_orders INNER JOIN users ON help_orders.grantee_id = users.id
+      WHERE help_orders.id = $1
+    `, [id]);
+
+    data = result.rows;
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data[0];
+}
+
+const completeOrder = async (userId, orderId) => {
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    await client.query("BEGIN");
+    await client.query(`
+      UPDATE "help_orders" SET status_id = 2, giver_id = $1
+      WHERE id = $2
+    `, [userId, orderId]);
+
+  } catch (error) {
+
+    await client.query("ROLLBACK");
+    console.log(error);
+
+  } finally {
+
+    await client.query("COMMIT");
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+}
+
+const getMyDonations = async (userId) => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query(`
+      SELECT help_orders.id, categorie_id as type, status_id, title, description, users.username
+      FROM help_orders
+      INNER JOIN users ON help_orders.grantee_id = users.id
+      WHERE giver_id = $1
+    `, [userId]);
+
+    data = result.rows;
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data;
+}
+
+const getMyRequests = async (userId) => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query(`
+      SELECT title, categorie_id AS "type", status_id AS status_Order, users.username, description FROM help_orders
+      INNER JOIN users ON grantee_id = users.id
+      WHERE grantee_id = $1
+    `, [userId]);
+
+    data = result.rows;
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data;
+}
+
+const getUsersUniqueInformations = async () => {
+
+  let data = null;
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    const result = await client.query("SELECT username, cpf, email, ddd, cell FROM users");
+    data = result.rows;
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+  return data;
+}
+
+const insertNewUser = async (userObject) => {
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    await client.query("BEGIN");
+    await client.query(`
+      INSERT INTO users (cpf, fullname, username, email, hash, cep, address, district, city, state, ddd, cell, creation, salt) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    `, [userObject.cpf, userObject.fullName, userObject.username, userObject.email, userObject.hash, userObject.cep, userObject.address, userObject.district,
+    userObject.city, userObject.state, userObject.ddd, userObject.cell, userObject.creation, userObject.salt]);
+
+  } catch (error) {
+
+    await client.query("ROLLBACK");
+    console.log(error);
+
+  } finally {
+
+    await client.query("COMMIT");
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+}
+
+const insertNewOrder = async (orderObject, userId) => {
+
+  const client = new Client({
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: process.env.DBPORT,
+    database: process.env.DATABASE
+  });
+
+  try {
+
+    await client.connect();
+    console.log("Conectado ao Banco");
+    await client.query("BEGIN");
+    await client.query(`
+    INSERT INTO "help_orders" (title, description, categorie_id, grantee_id) VALUES
+      ($1, $2, $3, $4)
+    `, [orderObject.title,orderObject.description,orderObject.type,userId]);
+
+  } catch (error) {
+
+    await client.query("ROLLBACK");
+    console.log(error);
+
+  } finally {
+
+    await client.query("COMMIT");
+    await client.end();
+    console.log("Desconectado ao Banco de Dados");
+
+  }
+
+}
 
 app.listen(port);

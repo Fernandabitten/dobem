@@ -284,8 +284,8 @@ $(document).ready(() => {
         username: username,
         fullName: $("#full-name-input").val().toUpperCase(),
         email: $("#email-input").val(),
-        phoneDDD: $("#phone-input").val().substring(0, 2),
-        phoneNumber: $("#phone-input")
+        ddd: $("#phone-input").val().substring(0, 2),
+        cell: $("#phone-input")
           .val()
           .substring(2, $("#phone-input").val().length),
         cep: cep,

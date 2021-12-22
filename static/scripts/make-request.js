@@ -6,7 +6,6 @@ $(document).ready(() => {
   $(".make-request-button").on("click", function () {
     let orderCategory = $("#category-input").val();
     let orderTitle = $("#title-input").val();
-    let ordertelephone = $("#phone-input").val();
     let orderDescription = $("#description-input").val();
 
     $.ajax({
@@ -15,7 +14,6 @@ $(document).ready(() => {
       data: {
         type: orderCategory,
         title: orderTitle,
-        telephone: ordertelephone,
         description: orderDescription,
       },
       success: function (data) {
@@ -27,7 +25,6 @@ $(document).ready(() => {
     });
     $("#category-input").val("");
     $("#title-input").val("");
-    $("#phone-input").val("");
     $("#description-input").val("");
     $("#make-request-span").html(`
     <h3 style="color: #D0D28B;" class="centralize vertical-margin">NOVO PEDIDO CADASTRADO COM SUCESSO.</h3>

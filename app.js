@@ -441,8 +441,7 @@ const getUserLogin = async (username) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -475,8 +474,7 @@ const getOrders = async () => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -513,8 +511,7 @@ const confirmHelp = async (id) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -550,8 +547,7 @@ const completeOrder = async (userId, orderId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -587,8 +583,7 @@ const getMyDonations = async (userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -627,8 +622,7 @@ const getMyRequests = async (userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -697,8 +691,7 @@ const insertNewUser = async (userObject) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {
@@ -733,8 +726,7 @@ const insertNewOrder = async (orderObject, userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE,
-    ssl: true
+    database: process.env.DATABASE
   });
 
   try {

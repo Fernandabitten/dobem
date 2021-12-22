@@ -441,7 +441,11 @@ const getUserLogin = async (username) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -474,7 +478,12 @@ const getOrders = async () => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
+
   });
 
   try {
@@ -511,7 +520,11 @@ const confirmHelp = async (id) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -547,7 +560,11 @@ const completeOrder = async (userId, orderId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -583,7 +600,11 @@ const getMyDonations = async (userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -622,7 +643,11 @@ const getMyRequests = async (userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -660,7 +685,11 @@ const getUsersUniqueInformations = async () => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -691,7 +720,11 @@ const insertNewUser = async (userObject) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -726,7 +759,11 @@ const insertNewOrder = async (orderObject, userId) => {
     password: process.env.DBPASSWORD,
     host: process.env.DBHOST,
     port: process.env.DBPORT,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+
+    ssl: true,
+    sslfactory: "org.postgresql.ssl.NonValidatingFactory",
+    sslmode: "require"
   });
 
   try {
@@ -753,5 +790,4 @@ const insertNewOrder = async (orderObject, userId) => {
   }
 
 }
-
 app.listen(port);
